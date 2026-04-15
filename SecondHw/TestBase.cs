@@ -97,5 +97,55 @@ namespace PinterestTests
 
             return profileButton.Displayed;
         }
+
+        public void OpenPinCreationPage()
+        {
+            driver.Navigate().GoToUrl("https://se.pinterest.com/pin-creation-tool/");
+        }
+
+        public void CreatePin(PinData pin)
+        {
+            var upload = wait.Until(d => d.FindElement(By.CssSelector("input[type='file']")));
+            upload.SendKeys(pin.ImagePath);
+
+            var textareas = wait.Until(d =>
+            {
+                var els = d.FindElements(By.TagName("textarea"));
+                return els.Count >= 2 ? els : null;
+            });
+
+            textareas[0].SendKeys(pin.Title);
+            textareas[1].SendKeys(pin.Description);
+
+            var publishButton = wait.Until(d =>
+            {
+                try
+                {
+                    return d.FindElement(By.XPath("//div[text()='Опубликовать'] | //div[text()='Publish']"));
+                }
+                catch
+                {
+                    return null;
+                }
+            });
+
+            publishButton.Click();
+        }
+
+        public bool IsPinCreated()
+        {
+            try
+            {
+                wait.Until(d =>
+                    d.FindElement(By.XPath("//*[contains(text(),'Опубликовано')]")));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        
     }
 }
