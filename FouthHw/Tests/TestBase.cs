@@ -6,18 +6,10 @@ namespace PinterestTests
     {
         protected ApplicationManager app;
 
-        protected AccountData DefaultUser = new AccountData("example@mail.ru", "password");
-
         [SetUp]
-        public void SetUp()
+        public void SetupTest()
         {
-            app = new ApplicationManager();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            app.Stop();
+            app = ApplicationManager.GetInstance();
         }
     }
 }
